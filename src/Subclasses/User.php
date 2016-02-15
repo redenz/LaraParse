@@ -73,4 +73,9 @@ class User extends ParseUser implements Authenticatable
     {
         return '';
     }
+    
+    public function getAuthIdentifierName()
+    {
+        return 'objectId';
+    }
 }
