@@ -7,16 +7,12 @@ use LaraParse\Auth\ParseUserProvider;
 use LaraParse\Subclasses\User;
 use Parse\ParseClient;
 use LaraParse\Session\ParseSessionStorage;
-
 use Auth;
 
 class ParseServiceProvider extends ServiceProvider
 {
-
     /**
      * Bootstrap the application services.
-     *
-     * @return void
      */
     public function boot()
     {
@@ -30,8 +26,6 @@ class ParseServiceProvider extends ServiceProvider
 
     /**
      * Register the application services.
-     *
-     * @return void
      */
     public function register()
     {
@@ -55,17 +49,17 @@ class ParseServiceProvider extends ServiceProvider
 
     private function registerConfig()
     {
-        $configPath = __DIR__ . '/../config/parse.php';
+        $configPath = __DIR__.'/../config/parse.php';
         $this->publishes([$configPath => config_path('parse.php')], 'config');
         $this->mergeConfigFrom($configPath, 'parse');
     }
 
     private function registerAuthProvider()
     {
-        Auth::provider('parse', function($app, array $config) {
-            // Return an instance of Illuminate\Contracts\Auth\UserProvider...
-            return new ParseUserProvider;
-        });    }
+        Auth::provider('parse', function () {
+            return new ParseUserProvider();
+        });
+    }
 
     private function registerSubclasses()
     {
@@ -75,12 +69,12 @@ class ParseServiceProvider extends ServiceProvider
         foreach ($subclasses as $subclass) {
             call_user_func("$subclass::registerSubclass");
 
-            if ((new $subclass)->getClassName() == '_User') {
+            if ((new $subclass())->getClassName() == '_User') {
                 $foundUserSubclass = true;
             }
         }
 
-        if (! $foundUserSubclass) {
+        if (!$foundUserSubclass) {
             User::registerSubclass();
         }
     }
@@ -105,6 +99,11 @@ class ParseServiceProvider extends ServiceProvider
 
         // Init the parse client
         ParseClient::initialize($config['app_id'], $config['rest_key'], $config['master_key']);
+
+        if (empty($config['server_url']) != true && empty($config['mount_path'] != true)) {
+            ParseClient::setServerURL($config['server_url'], $config['mount_path']);
+        }
+
         ParseClient::setStorage(new ParseSessionStorage($this->app['session']));
     }
 }
