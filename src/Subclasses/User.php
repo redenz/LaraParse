@@ -7,9 +7,8 @@ use LaraParse\Traits\CastsParseProperties;
 use Parse\ParseUser;
 
 /**
- * Class User
+ * Class User.
  *
- * @package LaraParse\Subclasses
  *
  * @property string         $username
  * @property string         $password
@@ -65,9 +64,7 @@ class User extends ParseUser implements Authenticatable
     /**
      * Set the token value for the "remember me" session.
      *
-     * @param  string $value
-     *
-     * @return void
+     * @param string $value
      */
     public function setRememberToken($value)
     {
@@ -82,10 +79,5 @@ class User extends ParseUser implements Authenticatable
     public function getRememberTokenName()
     {
         return '';
-    }
-    
-    public function getAuthIdentifierName()
-    {
-        return 'objectId';
     }
 }
