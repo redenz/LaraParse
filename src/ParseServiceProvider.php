@@ -2,12 +2,12 @@
 
 namespace LaraParse;
 
+use Auth;
 use Illuminate\Support\ServiceProvider;
 use LaraParse\Auth\ParseUserProvider;
+use LaraParse\Session\ParseSessionStorage;
 use LaraParse\Subclasses\User;
 use Parse\ParseClient;
-use LaraParse\Session\ParseSessionStorage;
-use Auth;
 
 class ParseServiceProvider extends ServiceProvider
 {
@@ -36,11 +36,11 @@ class ParseServiceProvider extends ServiceProvider
         );
 
         // Register our custom commands
-        $this->app['command.parse.subclass.make'] = $this->app->share(function ($app) {
+        $this->app['command.parse.subclass.make'] = $this->app->singleton(function ($app) {
             return $app->make('LaraParse\Console\SubclassMakeCommand');
         });
 
-        $this->app['command.parse.repository.make'] = $this->app->share(function ($app) {
+        $this->app['command.parse.repository.make'] = $this->app->singleton(function ($app) {
             return $app->make('LaraParse\Console\RepositoryMakeCommand');
         });
 
@@ -49,7 +49,7 @@ class ParseServiceProvider extends ServiceProvider
 
     private function registerConfig()
     {
-        $configPath = __DIR__.'/../config/parse.php';
+        $configPath = __DIR__ . '/../config/parse.php';
         $this->publishes([$configPath => config_path('parse.php')], 'config');
         $this->mergeConfigFrom($configPath, 'parse');
     }
