@@ -36,11 +36,11 @@ class ParseServiceProvider extends ServiceProvider
         );
 
         // Register our custom commands
-        $this->app['command.parse.subclass.make'] = $this->app->singleton(function ($app) {
+        $this->app->singleton('command.parse.subclass.make', function ($app) {
             return $app->make('LaraParse\Console\SubclassMakeCommand');
         });
 
-        $this->app['command.parse.repository.make'] = $this->app->singleton(function ($app) {
+        $this->app->singleton('command.parse.repository.make', function ($app) {
             return $app->make('LaraParse\Console\RepositoryMakeCommand');
         });
 
