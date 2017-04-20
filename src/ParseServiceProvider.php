@@ -97,6 +97,8 @@ class ParseServiceProvider extends ServiceProvider
     {
         $config = $this->app['config']->get('parse');
 
+        ParseClient::enableRevocableSessions();
+
         // Init the parse client
         ParseClient::initialize($config['app_id'], $config['rest_key'], $config['master_key']);
 
